@@ -4,9 +4,343 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ModelRigStudio.App"
+        xmlns:vm="clr-namespace:ModelRigStudio.App.ViewModels"
+        xmlns:conv="clr-namespace:ModelRigStudio.App.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="ModelRigStudio" Height="900" Width="1600"
+        Background="#FF2D2D30">
+    
+    <Window.Resources>
+        <!-- Converters -->
+        <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <conv:LogLevelToColorConverter x:Key="LogLevelToColorConverter"/>
+        
+        <!-- Dark Theme Styles -->
+        <SolidColorBrush x:Key="BackgroundBrush" Color="#2D2D30"/>
+        <SolidColorBrush x:Key="PanelBrush" Color="#3E3E42"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#555555"/>
+        <SolidColorBrush x:Key="TextBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="HighlightBrush" Color="#007ACC"/>
+        
+        <Style TargetType="Menu">
+            <Setter Property="Background" Value="{StaticResource PanelBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+        </Style>
+        
+        <Style TargetType="MenuItem">
+            <Setter Property="Background" Value="{StaticResource PanelBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+        </Style>
+        
+        <Style TargetType="ToolBar">
+            <Setter Property="Background" Value="{StaticResource PanelBrush}"/>
+        </Style>
+        
+        <Style TargetType="StatusBar">
+            <Setter Property="Background" Value="{StaticResource PanelBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+        </Style>
+        
+        <Style TargetType="TreeView">
+            <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        </Style>
+        
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        </Style>
+        
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Menu Bar -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Command="{Binding NewFileCommand}" InputGestureText="Ctrl+N"/>
+                <MenuItem Header="_Open" Command="{Binding OpenFileCommand}" InputGestureText="Ctrl+O"/>
+                <MenuItem Header="_Save" Command="{Binding SaveFileCommand}" InputGestureText="Ctrl+S"/>
+                <MenuItem Header="Save _As..." Command="{Binding SaveFileAsCommand}" InputGestureText="Ctrl+Shift+S"/>
+                <Separator/>
+                <MenuItem Header="Import _Model..." Command="{Binding ImportModelCommand}" InputGestureText="Ctrl+I"/>
+                <MenuItem Header="Import _Texture..." Command="{Binding ImportTextureCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Export Model..." Command="{Binding ExportModelCommand}" InputGestureText="Ctrl+E"/>
+                <MenuItem Header="Export _Selected..." Command="{Binding ExportSelectedCommand}"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Command="{Binding ExitCommand}" InputGestureText="Alt+F4"/>
+            </MenuItem>
+            
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Undo" Command="{Binding UndoCommand}" InputGestureText="Ctrl+Z"/>
+                <MenuItem Header="_Redo" Command="{Binding RedoCommand}" InputGestureText="Ctrl+Y"/>
+                <Separator/>
+                <MenuItem Header="D_uplicate" Command="{Binding DuplicateCommand}" InputGestureText="Ctrl+D"/>
+                <MenuItem Header="_Delete" Command="{Binding DeleteCommand}" InputGestureText="Delete"/>
+            </MenuItem>
+            
+            <MenuItem Header="_View">
+                <MenuItem Header="Render Mode">
+                    <MenuItem Header="_Shaded" Command="{Binding SetRenderModeShadedCommand}" InputGestureText="1"/>
+                    <MenuItem Header="_Wireframe" Command="{Binding SetRenderModeWireframeCommand}" InputGestureText="2"/>
+                    <MenuItem Header="_Normals" Command="{Binding SetRenderModeNormalsCommand}" InputGestureText="3"/>
+                    <MenuItem Header="_UV" Command="{Binding SetRenderModeUVCommand}" InputGestureText="4"/>
+                    <MenuItem Header="_Weights" Command="{Binding SetRenderModeWeightsCommand}" InputGestureText="5"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Toggle Panels" Command="{Binding TogglePanelsCommand}" InputGestureText="Tab"/>
+                <MenuItem Header="_Reset Layout" Command="{Binding ResetLayoutCommand}"/>
+            </MenuItem>
+            
+            <MenuItem Header="_Tools">
+                <MenuItem Header="Auto-Rig">
+                    <MenuItem Header="_Generic" Command="{Binding AutoRigGenericCommand}"/>
+                    <MenuItem Header="G_uided (Placeholder)" Command="{Binding AutoRigGuidedCommand}"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Bind Skin" Command="{Binding BindSkinCommand}"/>
+                <MenuItem Header="_Recompute Weights" Command="{Binding RecomputeWeightsCommand}"/>
+                <MenuItem Header="_Smooth Weights" Command="{Binding SmoothWeightsCommand}"/>
+                <MenuItem Header="_Mirror Weights (Placeholder)" Command="{Binding MirrorWeightsCommand}"/>
+                <Separator/>
+                <MenuItem Header="Recalc _Normals (Placeholder)" Command="{Binding RecalculateNormalsCommand}"/>
+                <MenuItem Header="Gen _Tangents (Placeholder)" Command="{Binding GenerateTangentsCommand}"/>
+                <MenuItem Header="Auto-_Unwrap (Placeholder)" Command="{Binding AutoUnwrapCommand}"/>
+            </MenuItem>
+            
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Command="{Binding ShowAboutCommand}"/>
+            </MenuItem>
+        </Menu>
+        
+        <!-- Tool Bar -->
+        <ToolBar Grid.Row="1">
+            <Button Content="New" Command="{Binding NewFileCommand}" ToolTip="New (Ctrl+N)"/>
+            <Button Content="Open" Command="{Binding OpenFileCommand}" ToolTip="Open (Ctrl+O)"/>
+            <Button Content="Save" Command="{Binding SaveFileCommand}" ToolTip="Save (Ctrl+S)"/>
+            <Separator/>
+            <Button Content="Import" Command="{Binding ImportModelCommand}" ToolTip="Import Model (Ctrl+I)"/>
+            <Button Content="Export" Command="{Binding ExportModelCommand}" ToolTip="Export Model (Ctrl+E)"/>
+            <Separator/>
+            <Button Content="Undo" Command="{Binding UndoCommand}" ToolTip="Undo (Ctrl+Z)"/>
+            <Button Content="Redo" Command="{Binding RedoCommand}" ToolTip="Redo (Ctrl+Y)"/>
+        </ToolBar>
+        
+        <!-- Main Content Area -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="200"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Left Panel: Outliner -->
+            <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"
+                    Background="{StaticResource PanelBrush}" 
+                    BorderBrush="{StaticResource BorderBrush}" 
+                    BorderThickness="1"
+                    Margin="5">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" 
+                               Text="Outliner" 
+                               Foreground="{StaticResource TextBrush}"
+                               FontWeight="Bold" 
+                               Padding="5"
+                               Background="#FF252526"/>
+                    <TreeView x:Name="OutlinerTreeView" 
+                              ItemsSource="{Binding Document.Scene.RootNode.Children}"
+                              SelectedItemChanged="OutlinerTreeView_SelectedItemChanged">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" 
+                                               Foreground="{StaticResource TextBrush}"/>
+                                    <TextBlock Text=" [Mesh]" 
+                                               Foreground="LightGreen"
+                                               Visibility="{Binding Mesh, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </DockPanel>
+            </Border>
+            
+            <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
+                          Width="5" 
+                          HorizontalAlignment="Stretch"
+                          Background="{StaticResource BorderBrush}"/>
+            
+            <!-- Center: 3D Viewport -->
+            <Border Grid.Column="2" Grid.Row="0"
+                    Background="{StaticResource BackgroundBrush}" 
+                    BorderBrush="{StaticResource BorderBrush}" 
+                    BorderThickness="1"
+                    Margin="0,5,0,0">
+                <Grid>
+                    <TextBlock Text="3D Viewport (HelixToolkit Integration Placeholder)" 
+                               Foreground="#888888"
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center"
+                               FontSize="16"/>
+                    <TextBlock Text="{Binding CurrentRenderMode, StringFormat='Render Mode: {0}'}" 
+                               Foreground="{StaticResource TextBrush}"
+                               HorizontalAlignment="Left" 
+                               VerticalAlignment="Top"
+                               Margin="10"
+                               FontSize="12"/>
+                </Grid>
+            </Border>
+            
+            <GridSplitter Grid.Column="2" Grid.Row="1"
+                          Height="5" 
+                          HorizontalAlignment="Stretch"
+                          Background="{StaticResource BorderBrush}"/>
+            
+            <!-- Bottom: Log/Console Panel -->
+            <Border Grid.Column="2" Grid.Row="2"
+                    Background="{StaticResource PanelBrush}" 
+                    BorderBrush="{StaticResource BorderBrush}" 
+                    BorderThickness="1"
+                    Margin="0,0,0,5">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" 
+                               Text="Log / Console" 
+                               Foreground="{StaticResource TextBrush}"
+                               FontWeight="Bold" 
+                               Padding="5"
+                               Background="#FF252526"/>
+                    <ListBox x:Name="LogListBox"
+                             ItemsSource="{Binding Source={x:Static local:Services.LogService.Instance}, Path=Messages}"
+                             DisplayMemberPath="."
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Foreground">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource LogLevelToColorConverter}">
+                                            <Binding Path="Level"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+            
+            <GridSplitter Grid.Column="3" Grid.Row="0" Grid.RowSpan="3"
+                          Width="5" 
+                          HorizontalAlignment="Stretch"
+                          Background="{StaticResource BorderBrush}"/>
+            
+            <!-- Right Panel: Inspector -->
+            <Border Grid.Column="4" Grid.Row="0" Grid.RowSpan="3"
+                    Background="{StaticResource PanelBrush}" 
+                    BorderBrush="{StaticResource BorderBrush}" 
+                    BorderThickness="1"
+                    Margin="5">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" 
+                               Text="Inspector" 
+                               Foreground="{StaticResource TextBrush}"
+                               FontWeight="Bold" 
+                               Padding="5"
+                               Background="#FF252526"/>
+                    <TabControl>
+                        <TabItem Header="Node">
+                            <ScrollViewer>
+                                <StackPanel Margin="5">
+                                    <TextBlock Text="Node Properties" 
+                                               Foreground="{StaticResource TextBrush}"
+                                               FontWeight="Bold" 
+                                               Margin="0,0,0,5"/>
+                                    <TextBlock Text="{Binding SelectedNode.Name, StringFormat='Name: {0}'}" 
+                                               Foreground="{StaticResource TextBrush}"/>
+                                    <TextBlock Text="Transform" 
+                                               Foreground="{StaticResource TextBrush}"
+                                               FontWeight="Bold" 
+                                               Margin="0,10,0,5"/>
+                                    <TextBlock Text="{Binding SelectedNode.Transform.Position, StringFormat='Position: {0}'}" 
+                                               Foreground="{StaticResource TextBrush}"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="Mesh">
+                            <ScrollViewer>
+                                <StackPanel Margin="5">
+                                    <TextBlock Text="Mesh Properties" 
+                                               Foreground="{StaticResource TextBrush}"
+                                               FontWeight="Bold" 
+                                               Margin="0,0,0,5"/>
+                                    <TextBlock Text="{Binding SelectedNode.Mesh.Vertices.Count, StringFormat='Vertices: {0}'}" 
+                                               Foreground="{StaticResource TextBrush}"/>
+                                    <TextBlock Text="{Binding SelectedNode.Mesh.Indices.Count, StringFormat='Indices: {0}'}" 
+                                               Foreground="{StaticResource TextBrush}"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="Rig">
+                            <ScrollViewer>
+                                <StackPanel Margin="5">
+                                    <TextBlock Text="Rigging Properties" 
+                                               Foreground="{StaticResource TextBrush}"
+                                               FontWeight="Bold" 
+                                               Margin="0,0,0,5"/>
+                                    <TextBlock Text="{Binding SelectedNode.Mesh.SkinData.Skeleton.Bones.Count, StringFormat='Bones: {0}'}" 
+                                               Foreground="{StaticResource TextBrush}"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="Materials">
+                            <ScrollViewer>
+                                <StackPanel Margin="5">
+                                    <TextBlock Text="Material Properties" 
+                                               Foreground="{StaticResource TextBrush}"
+                                               FontWeight="Bold" 
+                                               Margin="0,0,0,5"/>
+                                    <TextBlock Text="{Binding SelectedNode.Mesh.Material.Name, StringFormat='Material: {0}'}" 
+                                               Foreground="{StaticResource TextBrush}"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
+                </DockPanel>
+            </Border>
+        </Grid>
+        
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="3">
+            <StatusBarItem>
+                <TextBlock Text="Ready" Foreground="{StaticResource TextBrush}"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock Text="{Binding Document.Scene.RootNode.Children.Count, StringFormat='Nodes: {0}'}" 
+                           Foreground="{StaticResource TextBrush}"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

@@ -1,13 +1,7 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using ModelRigStudio.App.ViewModels;
+using ModelRigStudio.App.Services;
+using ModelRigStudio.Core.Model;
 
 namespace ModelRigStudio.App;
 
@@ -19,5 +13,18 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        DataContext = new MainViewModel();
+    }
+
+    private void OutlinerTreeView_SelectedItemChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<object> e)
+    {
+        if (OutlinerTreeView.SelectedItem is Node node)
+        {
+            DocumentService.Instance.SelectedNode = node;
+            if (DataContext is MainViewModel vm)
+            {
+                vm.SelectedNode = node;
+            }
+        }
     }
 }
