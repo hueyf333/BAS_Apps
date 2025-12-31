@@ -1,0 +1,162 @@
+{
+  "source_mesh": "models/face_source.obj",
+  "target_mesh": "models/face_target.obj",
+  "landmarks": [
+    {
+      "type": "LeftEyeCornerInner",
+      "source": {
+        "mode": "triangle",
+        "triangle_index": 1234,
+        "barycentric": [0.33, 0.33, 0.34],
+        "world_position": [-0.5, 1.2, 0.3]
+      },
+      "target": {
+        "mode": "vertex",
+        "vertex_index": 567,
+        "world_position": [-0.52, 1.25, 0.35]
+      },
+      "enabled": true
+    },
+    {
+      "type": "LeftEyeCornerOuter",
+      "source": {
+        "mode": "triangle",
+        "triangle_index": 1456,
+        "barycentric": [0.25, 0.50, 0.25],
+        "world_position": [-1.2, 1.3, 0.1]
+      },
+      "target": {
+        "mode": "triangle",
+        "triangle_index": 890,
+        "barycentric": [0.30, 0.40, 0.30],
+        "world_position": [-1.25, 1.35, 0.15]
+      },
+      "enabled": true
+    },
+    {
+      "type": "RightEyeCornerInner",
+      "source": {
+        "mode": "triangle",
+        "triangle_index": 1567,
+        "barycentric": [0.35, 0.35, 0.30],
+        "world_position": [0.5, 1.2, 0.3]
+      },
+      "target": {
+        "mode": "vertex",
+        "vertex_index": 789,
+        "world_position": [0.52, 1.25, 0.35]
+      },
+      "enabled": true
+    },
+    {
+      "type": "RightEyeCornerOuter",
+      "source": {
+        "mode": "triangle",
+        "triangle_index": 1678,
+        "barycentric": [0.28, 0.48, 0.24],
+        "world_position": [1.2, 1.3, 0.1]
+      },
+      "target": {
+        "mode": "triangle",
+        "triangle_index": 1012,
+        "barycentric": [0.32, 0.38, 0.30],
+        "world_position": [1.25, 1.35, 0.15]
+      },
+      "enabled": true
+    },
+    {
+      "type": "NoseTip",
+      "source": {
+        "mode": "triangle",
+        "triangle_index": 2345,
+        "barycentric": [0.40, 0.30, 0.30],
+        "world_position": [0.0, 0.8, 1.2]
+      },
+      "target": {
+        "mode": "vertex",
+        "vertex_index": 1234,
+        "world_position": [0.0, 0.85, 1.25]
+      },
+      "enabled": true
+    },
+    {
+      "type": "MouthCornerLeft",
+      "source": {
+        "mode": "triangle",
+        "triangle_index": 3456,
+        "barycentric": [0.35, 0.40, 0.25],
+        "world_position": [-0.8, 0.2, 0.5]
+      },
+      "target": {
+        "mode": "triangle",
+        "triangle_index": 1567,
+        "barycentric": [0.33, 0.34, 0.33],
+        "world_position": [-0.82, 0.25, 0.55]
+      },
+      "enabled": true
+    },
+    {
+      "type": "MouthCornerRight",
+      "source": {
+        "mode": "triangle",
+        "triangle_index": 3567,
+        "barycentric": [0.38, 0.37, 0.25],
+        "world_position": [0.8, 0.2, 0.5]
+      },
+      "target": {
+        "mode": "triangle",
+        "triangle_index": 1678,
+        "barycentric": [0.31, 0.36, 0.33],
+        "world_position": [0.82, 0.25, 0.55]
+      },
+      "enabled": true
+    },
+    {
+      "type": "ChinTip",
+      "source": {
+        "mode": "triangle",
+        "triangle_index": 4567,
+        "barycentric": [0.50, 0.25, 0.25],
+        "world_position": [0.0, -0.8, 0.3]
+      },
+      "target": {
+        "mode": "vertex",
+        "vertex_index": 2345,
+        "world_position": [0.0, -0.75, 0.35]
+      },
+      "enabled": true
+    },
+    {
+      "type": "BrowLeftCenter",
+      "source": {
+        "mode": "triangle",
+        "triangle_index": 5678,
+        "barycentric": [0.40, 0.35, 0.25],
+        "world_position": [-0.6, 1.8, 0.2]
+      },
+      "target": {
+        "mode": "triangle",
+        "triangle_index": 2456,
+        "barycentric": [0.38, 0.32, 0.30],
+        "world_position": [-0.62, 1.85, 0.25]
+      },
+      "enabled": false
+    },
+    {
+      "type": "BrowRightCenter",
+      "source": {
+        "mode": "triangle",
+        "triangle_index": 5789,
+        "barycentric": [0.42, 0.33, 0.25],
+        "world_position": [0.6, 1.8, 0.2]
+      },
+      "target": {
+        "mode": "triangle",
+        "triangle_index": 2567,
+        "barycentric": [0.36, 0.34, 0.30],
+        "world_position": [0.62, 1.85, 0.25]
+      },
+      "enabled": false
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+# Build outputs
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.obj
+*.log
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.VC.opendb
+*.vcxproj.filters
+
+# Intermediate files
+*.iobj
+*.ipdb
+*.exp
+*.lib
+
+# ImGui generated
+imgui.ini
+
+# Temporary files
+*.tmp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
